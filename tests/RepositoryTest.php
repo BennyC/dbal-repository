@@ -78,6 +78,16 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers ::newCollection
+     */
+    public function testNewCollection()
+    {
+        $collection = $this->repository->newCollection([1, 2, 3]);
+        $this->assertInstanceOf(Collection::class, $collection);
+        $this->assertCount(3, $collection);
+    }
+
+    /**
      * @covers ::insert
      */
     public function testInserting()

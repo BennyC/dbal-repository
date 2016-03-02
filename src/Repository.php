@@ -89,7 +89,9 @@ class Repository
     protected function fetchAll(QueryBuilder $query)
     {
         $stmt = $query->execute();
-        return new Collection($stmt->fetchAll(\PDO::FETCH_CLASS, $this->getDao()));
+        $items = $stmt->fetchAll(\PDO::FETCH_CLASS, $this->getDao());
+
+        return $this->newCollection($items);
     }
 
     /**
@@ -99,6 +101,16 @@ class Repository
     public function newQueryBuilder()
     {
         return $this->db->createQueryBuilder();
+    }
+
+    /**
+     * Create a new Collection
+     * @param array
+     * @return \Fudge\DBAL\Collection
+     */
+    public function newCollection(array $items = [])
+    {
+        return new Collection($items);
     }
 
     /**
