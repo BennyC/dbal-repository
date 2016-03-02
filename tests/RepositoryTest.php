@@ -138,7 +138,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $this->generateRows(10, true);
 
         $results = $this->repository->findAllBy(1, "column_1");
-        $this->assertInternalType("array", $results);
+        $this->assertInstanceOf("Fudge\DBAL\Collection", $results);
         $this->assertCount(10, $results);
     }
 
@@ -151,7 +151,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $this->generateRows(10, true);
 
         $results = $this->repository->findAll();
-        $this->assertInternalType("array", $results);
+        $this->assertInstanceOf("Fudge\DBAL\Collection", $results);
         $this->assertCount(10, $results);
     }
 

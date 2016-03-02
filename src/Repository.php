@@ -89,7 +89,7 @@ class Repository
     protected function fetchAll(QueryBuilder $query)
     {
         $stmt = $query->execute();
-        return $stmt->fetchAll(\PDO::FETCH_CLASS, $this->getDao());
+        return new Collection($stmt->fetchAll(\PDO::FETCH_CLASS, $this->getDao()));
     }
 
     /**
