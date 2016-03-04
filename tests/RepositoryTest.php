@@ -62,11 +62,12 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ::getDao
+     * @covers ::newEntity
      */
-    public function testDefaultDao()
+    public function testNewEntity()
     {
-        $this->assertEquals("stdClass", $this->repository->getDao());
+        $entity = $this->repository->newEntity();
+        $this->assertInstanceOf("Fudge\DBAL\Entity", $entity);
     }
 
     /**
@@ -122,7 +123,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
 
         $this->repository->update(["column_1" => "ben"], ["column_1" => 1]);
         $row = $this->repository->findBy(2, "column_2");
-        $this->assertEquals("ben", $row->column_1);
+        $this->assertEquals("ben", $row->getAttribute("column_1"));
     }
 
     /**
@@ -134,9 +135,9 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $this->generateRows();
 
         $result = $this->repository->findBy(1, "column_1");
-        $this->assertInstanceOf("stdClass", $result);
-        $this->assertObjectHasAttribute("column_1", $result);
-        $this->assertEquals(1, $result->column_1);
+        $this->assertInstanceOf("Fudge\DBAL\Entity", $result);
+        $this->assertArrayHasKey("column_1", $result->getAttributes());
+        $this->assertEquals(1, $result->getAttribute("column_1"));
     }
 
     /**

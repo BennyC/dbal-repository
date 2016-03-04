@@ -58,14 +58,14 @@ class Repository
     }
 
     /**
-     * Return the Data Access Object's fully qualified domain name for this
-     * repository
-     * Extend this method to use your own DAO
-     * @return string
+     * Create a new Entity with specified attributes, this isn't persisted
+     * to the database
+     * @param array
+     * @return mixed
      */
-    public function getDao()
+    public function newEntity(array $attributes = [])
     {
-        return \stdClass::class;
+        return new Entity($attributes);
     }
 
     /**
@@ -77,7 +77,9 @@ class Repository
     protected function fetch(QueryBuilder $query)
     {
         $stmt = $query->execute();
-        return $stmt->fetchObject($this->getDao());
+        $item = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+        return $this->newEntity($item);
     }
 
     /**
@@ -89,9 +91,14 @@ class Repository
     protected function fetchAll(QueryBuilder $query)
     {
         $stmt = $query->execute();
-        $items = $stmt->fetchAll(\PDO::FETCH_CLASS, $this->getDao());
+        $items = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        $entities = [];
 
-        return $this->newCollection($items);
+        foreach ($items as $item) {
+            $entities[] = $this->newEntity($item);
+        }
+
+        return $this->newCollection($entities);
     }
 
     /**
